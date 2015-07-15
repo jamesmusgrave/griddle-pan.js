@@ -69,19 +69,26 @@
 		},
 		_init: function(){
 			this._resize();
+			// Set the offset and a delayed offset
 			this.offset = 0;
 			this.runningOffset = 0;
+
+			// Set a start speed and a final speed
 			this.speed = this.cw*0.5;
-			// this.speed = 150;
 			this.minSpeed = this.cw*0.05;
+
+			// Find the element that moves
 			this.moveable = this.element.find('.template-items')[0];
 			this._render();
 			this.element.on("mousemove", this._mouseMove.bind(this));
 		},
 		_resize: function() {
 
+			// Container sizes
 			this.cx = this.element.offset().left;
 			this.cw = this.element.width();
+
+			// Moveable sizes
 			this.iw = this.element.find('.template-items').width();
 
 		},
@@ -89,23 +96,30 @@
 
 			this._resize();
 
+			// Where is the mouse relative to the width of the container
 			var x = e.clientX - this.cx;
 
+			// We are only interested in positions within the container
 			x = (x < 0)? 0 : x;
 			x = (x > this.cw)? this.cw : x;
 
+			// How far as a fraction is the mouse along the container
 			var f = x/this.cw;
 
+			// Make the offset
 			var offset = (this.iw - this.cw) * f;
 
 			// offset = (offset > this.w - this.cw)? this.iw - this.cw : offset;
 
 			// offset = (offset < 0)? 0 : 0 - offset;
 
+			// I put my thing down, flip it and reverse it
 			this.offset = 0 - offset;
 
 		},
 		_render: function() {
+
+			// The pan moves slow at the start and then speeds up as the user ingaged with it
 			this.speed -= 2;
 			this.speed = (this.speed< this.minSpeed)? this.minSpeed : this.speed;
 			var diff = (this.runningOffset - this.offset)/this.speed;
