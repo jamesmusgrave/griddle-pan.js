@@ -1,5 +1,5 @@
 /*
- * jQuery griddlePan v1.0.0
+ * jQuery griddlePan v1.0.1
  *
  * Licensed under the MIT license.
  * Copyright 2015 James Musgrave
@@ -19,7 +19,7 @@
 	};
 
 	$.griddlePan.defaults = {
-		
+		container: '.items'
 	};
 
 	$.griddlePan.prototype = {
@@ -27,7 +27,7 @@
 		 * Lets go
 		 */
 		_create: function(options) {
-			this.options = $.extend(true, {}, $.griddle.defaults, options);
+			this.options = $.extend(true, {}, $.griddlePan.defaults, options);
 
 			var instance = this;
 
@@ -78,9 +78,17 @@
 			this.minSpeed = this.cw*0.05;
 
 			// Find the element that moves
-			this.moveable = this.element.find('.template-items')[0];
+			this.moveable = this.element.find(this.options.container)[0];
 			this._render();
 			this.element.on("mousemove", this._mouseMove.bind(this));
+
+			this.element.hover(this._play.bind(this), this._pause.bind(this));
+		},
+		_pause: function(){
+			this.play = false;
+		},
+		_play: function(){
+			this.play = true;
 		},
 		_resize: function() {
 
@@ -89,7 +97,7 @@
 			this.cw = this.element.width();
 
 			// Moveable sizes
-			this.iw = this.element.find('.template-items').width();
+			this.iw = this.element.find(this.options.container).width();
 
 		},
 		_mouseMove: function(e){
@@ -118,13 +126,14 @@
 
 		},
 		_render: function() {
-
 			// The pan moves slow at the start and then speeds up as the user ingaged with it
-			this.speed -= 2;
-			this.speed = (this.speed< this.minSpeed)? this.minSpeed : this.speed;
-			var diff = (this.runningOffset - this.offset)/this.speed;
-			this.runningOffset -= diff;
-			this.moveable.style.webkitTransform = 'translate3D('+this.runningOffset+'px,0px,0px)';
+			if(this.play){	
+				this.speed -= 2;
+				this.speed = (this.speed< this.minSpeed)? this.minSpeed : this.speed;
+				var diff = (this.runningOffset - this.offset)/this.speed;
+				this.runningOffset -= diff;
+				this.moveable.style.webkitTransform = 'translate3D('+this.runningOffset+'px,0px,0px)';
+			}
 		  	requestAnimationFrame(this._render.bind(this));
 		},
 		_cancel: function() {
