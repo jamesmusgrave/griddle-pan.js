@@ -19,7 +19,8 @@
 	};
 
 	$.griddlePan.defaults = {
-		container: '.items'
+		container: '.items',
+		pauseOnMouseOut: true
 	};
 
 	$.griddlePan.prototype = {
@@ -82,7 +83,11 @@
 			this._render();
 			this.element.on("mousemove", this._mouseMove.bind(this));
 
-			this.element.hover(this._play.bind(this), this._pause.bind(this));
+			if(this.options.pauseOnMouseOut){
+				this.element.hover(this._play.bind(this), this._pause.bind(this));
+			} else {
+				this._play();
+			}
 		},
 		_pause: function(){
 			this.play = false;
