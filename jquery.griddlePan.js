@@ -1,5 +1,5 @@
 /*
- * jQuery griddlePan v1.0.1
+ * jQuery griddlePan v1.0.2
  *
  * Licensed under the MIT license.
  * Copyright 2015 James Musgrave
@@ -81,7 +81,16 @@
 			// Find the element that moves
 			this.moveable = this.element.find(this.options.container)[0];
 			this._render();
-			this.element.on("mousemove", this._mouseMove.bind(this));
+
+			if (Modernizr.touch){
+				this.element.addClass('griddlepan-touch');
+				this.element.css({
+					'-webkit-overflow-scrolling': 'touch',
+					'overflow-x': 'scroll'
+				});
+			} else {
+				this.element.on("mousemove", this._mouseMove.bind(this));
+			}
 
 			if(this.options.pauseOnMouseOut){
 				this.element.hover(this._play.bind(this), this._pause.bind(this));
