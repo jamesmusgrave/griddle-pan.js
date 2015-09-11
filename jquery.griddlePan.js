@@ -1,5 +1,5 @@
 /*
- * jQuery griddlePan v1.0.2
+ * jQuery griddlePan v1.0.3
  *
  * Licensed under the MIT license.
  * Copyright 2015 James Musgrave
@@ -121,6 +121,8 @@
 			// Where is the mouse relative to the width of the container
 			var x = e.clientX - this.cx;
 
+			
+
 			// We are only interested in positions within the container
 			x = (x < 0)? 0 : x;
 			x = (x > this.cw)? this.cw : x;
@@ -147,6 +149,10 @@
 				var diff = (this.runningOffset - this.offset)/this.speed;
 				this.runningOffset -= diff;
 				this.moveable.style.webkitTransform = 'translate3D('+this.runningOffset+'px,0px,0px)';
+				this.moveable.style.MozTransform = 'translate3D('+this.runningOffset+'px,0px,0px)';
+				this.moveable.style.msTransform = 'translate3D('+this.runningOffset+'px,0px,0px)';
+				this.moveable.style.OTransform = 'translate3D('+this.runningOffset+'px,0px,0px)';
+				this.moveable.style.transform = 'translate3D('+this.runningOffset+'px,0px,0px)';
 			}
 		  	requestAnimationFrame(this._render.bind(this));
 		},
