@@ -1,5 +1,5 @@
 /*
- * jQuery griddlePan v1.0.3
+ * jQuery griddlePan v1.0.4
  *
  * Licensed under the MIT license.
  * Copyright 2015 James Musgrave
@@ -40,6 +40,12 @@
 				$(window).bind('smartresize.griddlePan', function() {
 					instance._resize();
 				});
+			}
+
+			if(Modernizr.csstransforms3d){
+				this.use3D = true;
+			} else {
+				this.use3D = false;
 			}
 
 			this._init();
@@ -148,11 +154,19 @@
 				this.speed = (this.speed< this.minSpeed)? this.minSpeed : this.speed;
 				var diff = (this.runningOffset - this.offset)/this.speed;
 				this.runningOffset -= diff;
-				this.moveable.style.webkitTransform = 'translate3D('+this.runningOffset+'px,0px,0px)';
-				this.moveable.style.MozTransform = 'translate3D('+this.runningOffset+'px,0px,0px)';
-				this.moveable.style.msTransform = 'translate3D('+this.runningOffset+'px,0px,0px)';
-				this.moveable.style.OTransform = 'translate3D('+this.runningOffset+'px,0px,0px)';
-				this.moveable.style.transform = 'translate3D('+this.runningOffset+'px,0px,0px)';
+				if(this.use3D){
+					this.moveable.style.webkitTransform = 'translate3D('+this.runningOffset+'px,0px,0px)';
+					this.moveable.style.MozTransform = 'translate3D('+this.runningOffset+'px,0px,0px)';
+					this.moveable.style.msTransform = 'translate3D('+this.runningOffset+'px,0px,0px)';
+					this.moveable.style.OTransform = 'translate3D('+this.runningOffset+'px,0px,0px)';
+					this.moveable.style.transform = 'translate3D('+this.runningOffset+'px,0px,0px)';
+				} else {
+					this.moveable.style.webkitTransform = 'translateX('+this.runningOffset+'px)';
+					this.moveable.style.MozTransform = 'translateX('+this.runningOffset+'px)';
+					this.moveable.style.msTransform = 'translateX('+this.runningOffset+'px)';
+					this.moveable.style.OTransform = 'translateX('+this.runningOffset+'px)';
+					this.moveable.style.transform = 'translateX('+this.runningOffset+'px)';
+				}
 			}
 		  	requestAnimationFrame(this._render.bind(this));
 		},
