@@ -1,5 +1,5 @@
 /*
- * jQuery griddlePan v1.0.4
+ * jQuery griddlePan v1.0.5
  *
  * Licensed under the MIT license.
  * Copyright 2015 James Musgrave
@@ -82,7 +82,7 @@
 
 			// Set a start speed and a final speed
 			this.speed = this.cw*0.5;
-			this.minSpeed = this.cw*0.05;
+			this.minSpeed = this.cw*0.03;
 
 			// Find the element that moves
 			this.moveable = this.element.find(this.options.container)[0];
@@ -127,14 +127,16 @@
 			// Where is the mouse relative to the width of the container
 			var x = e.clientX - this.cx;
 
-			
-
 			// We are only interested in positions within the container
 			x = (x < 0)? 0 : x;
 			x = (x > this.cw)? this.cw : x;
 
 			// How far as a fraction is the mouse along the container
 			var f = x/this.cw;
+
+			f = (f * 1.2) - 0.1;
+			f = (f < 0)? 0 : f;
+			f = (f > 1)? 1 : f;
 
 			// Make the offset
 			var offset = (this.iw - this.cw) * f;
